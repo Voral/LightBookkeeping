@@ -24,6 +24,8 @@ class StringFieldTest extends TestCase
 		$field = new StringField('NAME');
 		$this->assertSame('10', $field->toDB(10));
 		$this->assertSame('testing', $field->toDB(" \ttesting\n"));
+		$this->assertSame('10', $field->prepareValue(10));
+		$this->assertSame('testing', $field->prepareValue(" \ttesting\n"));
 	}
 
 	/**

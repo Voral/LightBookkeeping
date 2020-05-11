@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\DB\Fields;
-
 
 /**
  * Базовый класс описания полей таблиц
@@ -57,6 +55,16 @@ class Field
 	 * @return mixed
 	 */
 	public function toDB($value)
+	{
+		return $this->prepareValue($value);
+	}
+
+	/**
+	 * Обработка значения при установке значения свойства
+	 * @param $value
+	 * @return mixed
+	 */
+	public function prepareValue($value)
 	{
 		return $value;
 	}

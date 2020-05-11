@@ -1,0 +1,27 @@
+{
+    "config": {
+        "bin-dir": "vendor/bin",
+        "sort-packages": true
+    },
+    "require": {
+        "php": ">=7.1.0",
+        "ext-pdo": "^7.1",
+        "ext-json": "*",
+        "phpdocumentor/phpdocumentor": "2.*",
+        "robmorgan/phinx": "^0.8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App"
+        }
+    },
+    "require-dev": {
+        "ext-xsl": "*",
+        "phpunit/phpunit": "^9.1",
+        "roave/security-advisories": "dev-master"
+    },
+    "scripts": {
+        "test": "phpunit --colors=always",
+        "doc": "vendor/bin/phpdoc -d ./App -t ./www/docs/"
+    }
+}

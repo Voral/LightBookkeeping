@@ -1,0 +1,5 @@
+_temp
+phinx.yml
+vendor
+www/docs
+.idea

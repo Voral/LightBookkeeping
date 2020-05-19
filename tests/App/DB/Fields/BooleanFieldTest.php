@@ -2,6 +2,7 @@
 
 
 use App\DB\Fields\BooleanField;
+use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
 class BooleanFieldTest extends TestCase
@@ -12,7 +13,11 @@ class BooleanFieldTest extends TestCase
 	 */
 	public function testFromDB()
 	{
-		$field = new BooleanField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new BooleanField($table,'NAME');
 		$this->assertSame(true, $field->fromDB('1'));
 		$this->assertSame(true, $field->fromDB(1));
 		$this->assertSame(false, $field->fromDB('0'));
@@ -24,7 +29,11 @@ class BooleanFieldTest extends TestCase
 	 */
 	public function testToDB()
 	{
-		$field = new BooleanField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->getMock();
+
+		$field = new BooleanField($table, 'NAME');
 		$this->assertSame(1, $field->toDB(true));
 		$this->assertSame(0, $field->toDB(false));
 	}
@@ -40,22 +49,29 @@ class BooleanFieldTest extends TestCase
 		$this->assertSame($expected, $field->getDefaultValue());
 	}
 
-	public function defaultDataProvider():array {
+	public function defaultDataProvider(): array
+	{
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+//		$table->method('method1')->willReturn([1,2,3]);
 		return [
-			'boolean_true' => 		[
-				'field' => new BooleanField('NAME', true, true),
+			'boolean_true' => [
+				'field' => new BooleanField($table, 'NAME', true, true),
 				'expected' => true
 			],
 			'boolean_false' => [
-				'field' => new BooleanField('NAME', true, false),
+				'field' => new BooleanField($table, 'NAME', true, false),
 				'expected' => false
 			],
 			'int_1' => [
-				'field' => new BooleanField('NAME', true, 1),
+				'field' => new BooleanField($table, 'NAME', true, 1),
 				'expected' => true
 			],
 			'int_0' => [
-				'field' => new BooleanField('NAME', true, 0),
+				'field' => new BooleanField($table, 'NAME', true, 0),
 				'expected' => false
 			]
 		];

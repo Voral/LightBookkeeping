@@ -2,6 +2,7 @@
 
 
 use App\DB\Fields\FloatField;
+use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
 class FloatFieldTest extends TestCase
@@ -12,7 +13,11 @@ class FloatFieldTest extends TestCase
 	 */
 	public function testFromDB()
 	{
-		$field = new FloatField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new FloatField($table,'NAME');
 		$this->assertSame(10.2, $field->fromDB('10.2'));
 	}
 
@@ -25,7 +30,11 @@ class FloatFieldTest extends TestCase
 	 */
 	public function testToDB($value,$expected)
 	{
-		$field = new FloatField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new FloatField($table,'NAME');
 		$this->assertSame($expected, $field->toDB($value));
 		$this->assertSame($expected, $field->prepareValue($value));
 	}
@@ -52,7 +61,11 @@ class FloatFieldTest extends TestCase
 	 */
 	public function testGetDefaultValue()
 	{
-		$field = new FloatField('NAME', true, '10.3');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new FloatField($table,'NAME', true, '10.3');
 		$this->assertSame(10.3, $field->getDefaultValue());
 	}
 }

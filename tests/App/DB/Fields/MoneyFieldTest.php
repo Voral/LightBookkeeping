@@ -2,6 +2,7 @@
 
 
 use App\DB\Fields\MoneyField;
+use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
 class MoneyFieldTest extends TestCase
@@ -15,7 +16,11 @@ class MoneyFieldTest extends TestCase
 	 */
 	public function testToDB($value,$expected)
 	{
-		$field = new MoneyField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new MoneyField($table,'NAME');
 		$this->assertEquals($expected, $field->prepareValue($value));
 	}
 	public function toDbDataProvider()

@@ -18,16 +18,16 @@ class JournalTable extends Table
 		$this->name = 'journal';
 		$this->alias = 'j';
 		$this->fields = [
-			'id' => new IntegerField('id'),
-			'account_src_id' => new IntegerField('account_src_id'),
-			'account_dst_id' => new IntegerField('account_dst_id'),
-			'timestamp_x' => new DatetimeField('timestamp_x'),
-			'relation_id' => new IntegerField('relation_id'),
-			'relation_type' => new IntegerField('relation_type'),
-			'relation_param' => new FloatField('relation_param'),
-			'description' => new StringField('description'),
-			'total' => new MoneyField('total'),
-			'planned' => new BooleanField('planned')
+			'id' => new IntegerField($this, 'id'),
+			'account_src_id' => new IntegerField($this, 'account_src_id'),
+			'account_dst_id' => new IntegerField($this, 'account_dst_id'),
+			'timestamp_x' => new DatetimeField($this, 'timestamp_x'),
+			'relation_id' => new IntegerField($this, 'relation_id'),
+			'relation_type' => new IntegerField($this, 'relation_type'),
+			'relation_param' => new FloatField($this, 'relation_param'),
+			'description' => new StringField($this, 'description'),
+			'total' => new MoneyField($this, 'total'),
+			'planned' => new BooleanField($this, 'planned')
 		];
 	}
 }

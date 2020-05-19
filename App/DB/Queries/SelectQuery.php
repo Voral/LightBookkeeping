@@ -4,6 +4,8 @@
 namespace App\DB\Queries;
 
 
+use App\Exception\FieldException;
+
 class SelectQuery extends Query
 {
 	private $select = [];
@@ -42,9 +44,15 @@ class SelectQuery extends Query
 		return implode(',', array_unique(array_values($arSelect)));
 	}
 
+	/**
+	 * Преобразовывает имя поля в представление с алиасами
+	 * @param string $name
+	 * @param string $key
+	 * @throws FieldException Выбрасывается если запрошено не существующее поле
+	 */
 	public function generateSelect(string &$name, string $key): void
 	{
-		$alias = is_numeric($key) ? '' : ' ' . $key;
-		$name = sprintf('%s.%s%s', $this->table->getAlias(), $name, $alias);
+		$alias = is_numeric($key) ? '' : $key;
+		$name = $this->table->getField($name)->sqlField($alias);
 	}
 }

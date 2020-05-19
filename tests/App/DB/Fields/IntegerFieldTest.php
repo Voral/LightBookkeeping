@@ -2,6 +2,7 @@
 
 
 use App\DB\Fields\IntegerField;
+use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
 class IntegerFieldTest extends TestCase
@@ -12,7 +13,11 @@ class IntegerFieldTest extends TestCase
 	 */
 	public function testFromDB()
 	{
-		$field = new IntegerField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new IntegerField($table,'NAME');
 		$this->assertSame(10, $field->fromDB('10'));
 	}
 
@@ -24,7 +29,11 @@ class IntegerFieldTest extends TestCase
 	 */
 	public function testToDB($value, $expected)
 	{
-		$field = new IntegerField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new IntegerField($table,'NAME');
 		$this->assertSame($expected, $field->toDB($value));
 		$this->assertSame($expected, $field->prepareValue($value));
 	}
@@ -51,7 +60,11 @@ class IntegerFieldTest extends TestCase
 	 */
 	public function testGetDefaultValue()
 	{
-		$field = new IntegerField('NAME', true, '10');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new IntegerField($table,'NAME', true, '10');
 		$this->assertSame(10, $field->getDefaultValue());
 	}
 }

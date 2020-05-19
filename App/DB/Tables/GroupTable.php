@@ -14,8 +14,8 @@ class GroupTable extends Table
 		$this->name = 'account_group';
 		$this->alias = 'gr';
 		$this->fields = [
-			'id' => new IntegerField('id'),
-			'name' => new StringField('name')
+			'id' => new IntegerField($this, 'id'),
+			'name' => new StringField($this, 'name')
 		];
 	}
 }

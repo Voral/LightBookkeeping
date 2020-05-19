@@ -2,6 +2,7 @@
 
 
 use App\DB\Fields\StringField;
+use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
 class StringFieldTest extends TestCase
@@ -12,7 +13,11 @@ class StringFieldTest extends TestCase
 	 */
 	public function testFromDB()
 	{
-		$field = new StringField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new StringField($table,'NAME');
 		$this->assertSame('10', $field->fromDB(10));
 	}
 
@@ -21,7 +26,11 @@ class StringFieldTest extends TestCase
 	 */
 	public function testToDB()
 	{
-		$field = new StringField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new StringField($table,'NAME');
 		$this->assertSame('10', $field->toDB(10));
 		$this->assertSame('testing', $field->toDB(" \ttesting\n"));
 		$this->assertSame('10', $field->prepareValue(10));
@@ -33,7 +42,11 @@ class StringFieldTest extends TestCase
 	 */
 	public function testGetDefaultValue()
 	{
-		$field = new StringField('NAME', true, 10);
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new StringField($table,'NAME', true, 10);
 		$this->assertSame('10', $field->getDefaultValue());
 	}
 }

@@ -16,14 +16,14 @@ class PlannedTable extends Table
 		$this->name = 'planned';
 		$this->alias = 'p';
 		$this->fields = [
-			'id' => new IntegerField('id'),
-			'account_src_id' => new IntegerField('account_src_id'),
-			'account_dst_id' => new IntegerField('account_dst_id'),
-			'relation_id' => new IntegerField('relation_id'),
-			'relation_type' => new IntegerField('relation_type'),
-			'relation_param' => new FloatField('relation_param'),
-			'description' => new StringField('description'),
-			'total' => new MoneyField('total')
+			'id' => new IntegerField($this, 'id'),
+			'account_src_id' => new IntegerField($this, 'account_src_id'),
+			'account_dst_id' => new IntegerField($this, 'account_dst_id'),
+			'relation_id' => new IntegerField($this, 'relation_id'),
+			'relation_type' => new IntegerField($this, 'relation_type'),
+			'relation_param' => new FloatField($this, 'relation_param'),
+			'description' => new StringField($this, 'description'),
+			'total' => new MoneyField($this, 'total')
 		];
 	}
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 use App\DB\Fields\Field;
 
@@ -21,9 +22,13 @@ class FieldTest extends TestCase
 
 	public function constructDataProvider()
 	{
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
 		return [
 			[
-				'field' => new Field('TEST1', true),
+				'field' => new Field($table,'TEST1', true),
 				'expected' => [
 					'name' => 'TEST1',
 					'canNull' => true,
@@ -31,7 +36,7 @@ class FieldTest extends TestCase
 				]
 			],
 			[
-				'field' => new Field('TEST2', true, 10),
+				'field' => new Field($table,'TEST2', true, 10),
 				'expected' => [
 					'name' => 'TEST2',
 					'canNull' => true,
@@ -39,7 +44,7 @@ class FieldTest extends TestCase
 				]
 			],
 			[
-				'field' => new Field('TEST'),
+				'field' => new Field($table,'TEST'),
 				'expected' => [
 					'name' => 'TEST',
 					'canNull' => false,

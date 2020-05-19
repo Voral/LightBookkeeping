@@ -2,6 +2,8 @@
 
 namespace App\DB\Fields;
 
+use App\DB\Tables\Table;
+
 /**
  * Базовый класс описания полей таблиц
  * Class Field
@@ -15,9 +17,12 @@ class Field
 	private $canNull;
 	/** @var mixed занчение поля по умолчанию */
 	private $defaultValue;
+	/** @var Table */
+	private $table;
 
-	public function __construct(String $name, bool $canNull = false, $defaultValue = null)
+	public function __construct(Table $table, string $name, bool $canNull = false, $defaultValue = null)
 	{
+		$this->table = $table;
 		$this->name = $name;
 		$this->canNull = $canNull;
 		$this->defaultValue = $defaultValue;
@@ -64,7 +69,8 @@ class Field
 	 * @param $value
 	 * @return mixed
 	 */
-	public function sqlValue($value){
+	public function sqlValue($value)
+	{
 		return $this->toDB($value);
 	}
 
@@ -86,5 +92,14 @@ class Field
 	public function fromDB($value)
 	{
 		return $value;
+	}
+
+	public function sqlField(string $alias = ''): string
+	{
+		$result = sprintf('%s.%s', $this->table->getAlias(), $this->name);
+		if ($alias !== ''){
+			$result .= (' '.$alias);
+		}
+ 		return $result;
 	}
 }

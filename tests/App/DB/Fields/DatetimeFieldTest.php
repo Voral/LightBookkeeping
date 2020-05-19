@@ -1,5 +1,6 @@
 <?php
 
+use App\DB\Tables\Table;
 use App\Exception\FieldException;
 use \PHPUnit\Framework\TestCase;
 use App\DB\Fields\DatetimeField;
@@ -13,7 +14,11 @@ class DatetimeFieldTest extends TestCase
 	 */
 	public function testFromDB()
 	{
-		$field = new DatetimeField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new DatetimeField($table,'NAME');
 		$this->assertInstanceOf(DateTime::class, $field->fromDB('2019-01-01 00:00:00'));
 	}
 
@@ -25,7 +30,11 @@ class DatetimeFieldTest extends TestCase
 	 */
 	public function testGetDefaultValue($value, $expected)
 	{
-		$field = new DatetimeField('NAME', false, $value);
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new DatetimeField($table,'NAME', false, $value);
 		$prepared = $field->getDefaultValue();
 		$this->assertInstanceOf(DateTime::class, $prepared);
 		$this->assertEquals($expected, $prepared->format('Y-m-d'));
@@ -36,7 +45,11 @@ class DatetimeFieldTest extends TestCase
 	 */
 	public function testToDB()
 	{
-		$field = new DatetimeField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$field = new DatetimeField($table,'NAME');
 		$this->assertEquals('2019-01-01 01:02:03', $field->toDB('2019-01-01 01:02:03'));
 	}
 
@@ -48,7 +61,12 @@ class DatetimeFieldTest extends TestCase
 	 */
 	public function testPrepareValue($value, $expected)
 	{
-		$field = new DatetimeField('NAME');
+		/** @var Table $table */
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$field = new DatetimeField($table,'NAME');
 		$prepared = $field->prepareValue($value);
 		$this->assertInstanceOf(DateTime::class, $prepared);
 		$this->assertEquals($expected, $prepared->format('Y-m-d'));

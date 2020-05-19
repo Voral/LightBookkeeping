@@ -4,8 +4,8 @@
 namespace App\DB\Fields;
 
 
+use App\Exception\FieldException;
 use DateTime;
-use LogicException;
 
 class DatetimeField extends Field
 {
@@ -19,6 +19,11 @@ class DatetimeField extends Field
 		'Y-m-d H:i:s',
 	];
 
+	/**
+	 * @param $value
+	 * @return string
+	 * @throws FieldException
+	 */
 	public function toDB($value): string
 	{
 		return $this->prepareValue($value)->format(self::$format);
@@ -28,6 +33,7 @@ class DatetimeField extends Field
 	 * Обработка значения при установке значения свойства
 	 * @param $value
 	 * @return DateTime
+	 * @throws FieldException
 	 */
 	public function prepareValue($value): DateTime
 	{
@@ -45,8 +51,7 @@ class DatetimeField extends Field
 		} elseif ($value instanceof DateTime) {
 			return $value;
 		}
-		/** @todo Свои ексцепшены */
-		throw new LogicException('Unknown value type');
+		throw new FieldException('Unknown value type',$value,self::class);
 	}
 
 	public function fromDB($value): DateTime
@@ -54,6 +59,10 @@ class DatetimeField extends Field
 		return DateTime::createFromFormat(self::$format, $value);
 	}
 
+	/**
+	 * @return DateTime
+	 * @throws FieldException
+	 */
 	public function getDefaultValue(): DateTime
 	{
 		return $this->prepareValue(parent::getDefaultValue());

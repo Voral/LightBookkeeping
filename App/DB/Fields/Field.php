@@ -60,6 +60,15 @@ class Field
 	}
 
 	/**
+	 * Подготовка значения для вставки в запрос
+	 * @param $value
+	 * @return mixed
+	 */
+	public function sqlValue($value){
+		return $this->toDB($value);
+	}
+
+	/**
 	 * Обработка значения при установке значения свойства
 	 * @param $value
 	 * @return mixed

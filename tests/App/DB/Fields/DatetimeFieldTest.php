@@ -1,5 +1,6 @@
 <?php
 
+use App\Exception\FieldException;
 use \PHPUnit\Framework\TestCase;
 use App\DB\Fields\DatetimeField;
 
@@ -20,6 +21,7 @@ class DatetimeFieldTest extends TestCase
 	 * @param $value
 	 * @param $expected
 	 * @dataProvider prepareValueDataProvider
+	 * @throws FieldException
 	 */
 	public function testGetDefaultValue($value, $expected)
 	{
@@ -29,6 +31,9 @@ class DatetimeFieldTest extends TestCase
 		$this->assertEquals($expected, $prepared->format('Y-m-d'));
 	}
 
+	/**
+	 * @throws FieldException
+	 */
 	public function testToDB()
 	{
 		$field = new DatetimeField('NAME');
@@ -39,6 +44,7 @@ class DatetimeFieldTest extends TestCase
 	 * @param $value
 	 * @param $expected
 	 * @dataProvider prepareValueDataProvider
+	 * @throws FieldException
 	 */
 	public function testPrepareValue($value, $expected)
 	{

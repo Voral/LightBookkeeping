@@ -21,7 +21,7 @@ class StringField extends Field
 	 * @param $value
 	 * @return string
 	 */
-	public function prepareValue($value):string
+	public function prepareValue($value): string
 	{
 		return trim($value);
 	}
@@ -31,7 +31,7 @@ class StringField extends Field
 		return $value;
 	}
 
-	public function getDefaultValue():string
+	public function getDefaultValue(): string
 	{
 		return parent::getDefaultValue();
 	}

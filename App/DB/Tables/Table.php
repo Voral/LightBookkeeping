@@ -1,11 +1,9 @@
 <?php
 
-
 namespace App\DB\Tables;
 
-
 use App\DB\Fields\Field;
-use App\Exception\FieldException;
+use App\Exception\FieldUndefinedException;
 
 abstract class Table
 {
@@ -41,17 +39,13 @@ abstract class Table
 	/**
 	 * @param string $name
 	 * @return Field
-	 * @throws FieldException
+	 * @throws FieldUndefinedException
 	 */
 	public function getField(string $name): Field
 	{
 		if (array_key_exists($name, $this->fields)) {
 			return $this->fields[$name];
 		}
-		throw new FieldException(sprintf(
-			'Field %s is not defined in table %s',
-			$this->name,
-			$name
-		));
+		throw new FieldUndefinedException($this->name, $name);
 	}
 }

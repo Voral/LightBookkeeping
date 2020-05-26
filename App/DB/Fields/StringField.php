@@ -9,7 +9,7 @@ namespace App\DB\Fields;
  * Class StringField
  * @package App\DB\Fields
  */
-class StringField extends Field
+class StringField extends TableField
 {
 	public function toDB($value): string
 	{

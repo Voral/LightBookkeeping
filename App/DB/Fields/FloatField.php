@@ -4,7 +4,7 @@
 namespace App\DB\Fields;
 
 
-class FloatField extends Field
+class FloatField extends TableField
 {
 	public function toDB($value): float
 	{

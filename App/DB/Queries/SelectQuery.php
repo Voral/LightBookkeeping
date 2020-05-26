@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\DB\Queries;
 
-
-use App\Exception\FieldException;
+use App\Exception\FieldUndefinedException;
 
 class SelectQuery extends Query
 {
@@ -48,11 +46,12 @@ class SelectQuery extends Query
 	 * Преобразовывает имя поля в представление с алиасами
 	 * @param string $name
 	 * @param string $key
-	 * @throws FieldException Выбрасывается если запрошено не существующее поле
+	 * @throws FieldUndefinedException Выбрасывается если запрошено не существующее поле
 	 */
 	public function generateSelect(string &$name, string $key): void
 	{
 		$alias = is_numeric($key) ? '' : $key;
 		$name = $this->table->getField($name)->sqlField($alias);
 	}
+
 }

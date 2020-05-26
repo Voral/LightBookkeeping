@@ -1,13 +1,11 @@
 <?php
 
-
 namespace App\DB\Fields;
 
-
-use App\Exception\FieldException;
+use App\Exception\FieldValueException;
 use DateTime;
 
-class DatetimeField extends Field
+class DatetimeField extends TableField
 {
 	private static $format = 'Y-m-d H:i:s';
 	private static $checkFormat = [
@@ -22,7 +20,7 @@ class DatetimeField extends Field
 	/**
 	 * @param $value
 	 * @return string
-	 * @throws FieldException
+	 * @throws FieldValueException
 	 */
 	public function toDB($value): string
 	{
@@ -33,13 +31,13 @@ class DatetimeField extends Field
 	 * Обработка значения при установке значения свойства
 	 * @param $value
 	 * @return DateTime
-	 * @throws FieldException
+	 * @throws FieldValueException
 	 */
 	public function prepareValue($value): DateTime
 	{
 		if (is_string($value)) {
 			$value = str_replace(
-				['/','.',','],
+				['/', '.', ','],
 				'-',
 				$value
 			);
@@ -51,7 +49,7 @@ class DatetimeField extends Field
 		} elseif ($value instanceof DateTime) {
 			return $value;
 		}
-		throw new FieldException('Unknown value type',$value,self::class);
+		throw new FieldValueException($value, self::class);
 	}
 
 	public function fromDB($value): DateTime
@@ -61,7 +59,7 @@ class DatetimeField extends Field
 
 	/**
 	 * @return DateTime
-	 * @throws FieldException
+	 * @throws FieldValueException
 	 */
 	public function getDefaultValue(): DateTime
 	{

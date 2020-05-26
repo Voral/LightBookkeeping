@@ -1,7 +1,7 @@
 <?php
 
 use App\DB\Tables\Table;
-use App\Exception\FieldException;
+use App\Exception\FieldValueException;
 use \PHPUnit\Framework\TestCase;
 use App\DB\Fields\DatetimeField;
 
@@ -26,7 +26,7 @@ class DatetimeFieldTest extends TestCase
 	 * @param $value
 	 * @param $expected
 	 * @dataProvider prepareValueDataProvider
-	 * @throws FieldException
+	 * @throws FieldValueException
 	 */
 	public function testGetDefaultValue($value, $expected)
 	{
@@ -41,7 +41,7 @@ class DatetimeFieldTest extends TestCase
 	}
 
 	/**
-	 * @throws FieldException
+	 * @throws FieldValueException
 	 */
 	public function testToDB()
 	{
@@ -57,7 +57,7 @@ class DatetimeFieldTest extends TestCase
 	 * @param $value
 	 * @param $expected
 	 * @dataProvider prepareValueDataProvider
-	 * @throws FieldException
+	 * @throws FieldValueException
 	 */
 	public function testPrepareValue($value, $expected)
 	{

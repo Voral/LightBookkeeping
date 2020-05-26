@@ -1,15 +1,15 @@
 <?php
 
+use App\DB\Fields\TableField;
 use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
-use App\DB\Fields\Field;
 
-class FieldTest extends TestCase
+class TableFieldTest extends TestCase
 {
 	/**
 	 * Конструктор класса должен заполнять значение основных свойств
 	 * canNull и defaultValue - не обязательные параметры
-	 * @param Field $field
+	 * @param TableField $field
 	 * @param array $expected
 	 * @dataProvider constructDataProvider
 	 */
@@ -28,7 +28,7 @@ class FieldTest extends TestCase
 			->getMock();
 		return [
 			[
-				'field' => new Field($table,'TEST1', true),
+				'field' => new TableField($table, 'TEST1', true),
 				'expected' => [
 					'name' => 'TEST1',
 					'canNull' => true,
@@ -36,7 +36,7 @@ class FieldTest extends TestCase
 				]
 			],
 			[
-				'field' => new Field($table,'TEST2', true, 10),
+				'field' => new TableField($table, 'TEST2', true, 10),
 				'expected' => [
 					'name' => 'TEST2',
 					'canNull' => true,
@@ -44,12 +44,44 @@ class FieldTest extends TestCase
 				]
 			],
 			[
-				'field' => new Field($table,'TEST'),
+				'field' => new TableField($table, 'TEST'),
 				'expected' => [
 					'name' => 'TEST',
 					'canNull' => false,
 					'default' => null
 				]
+			],
+		];
+	}
+
+	/**
+	 * Должно возвращать наименование поле с алиасами таблицы и, если задано, алиасом
+	 * поля
+	 * @param $result
+	 * @param $expected
+	 * @dataProvider sqlFieldDataProvider
+	 */
+	public function testSqlField($result, $expected)
+	{
+		$this->assertEquals($expected, $result);
+	}
+
+	public function sqlFieldDataProvider()
+	{
+		$table = $this->getMockBuilder(Table::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$table->method('getAlias')->willReturn('ab');
+		/** @var Table $table */
+		$field = new TableField($table, 'TEST1', true);
+		return [
+			'single' => [
+				'result' => $field->sqlField(),
+				'expected' => 'ab.TEST1'
+			],
+			'alias' => [
+				'result' => $field->sqlField('al'),
+				'expected' => 'ab.TEST1 al'
 			],
 		];
 	}

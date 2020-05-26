@@ -8,7 +8,7 @@ namespace App\DB\Fields;
  * Class MoneyField
  * @package App\DB\Fields
  */
-class MoneyField extends Field
+class MoneyField extends TableField
 {
 	/**
 	 * Обработка значения при установке значения свойства

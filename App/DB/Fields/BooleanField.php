@@ -8,18 +8,33 @@ namespace App\DB\Fields;
  * Class BooleanField
  * @package App\DB\Fields
  */
-class BooleanField extends Field
+class BooleanField extends TableField
 {
+	/**
+	 * Переопределено для установки типа результата
+	 * @param $value
+	 * @return int
+	 */
 	public function toDB($value): int
 	{
-		return $this->prepareValue($value);
+		return parent::toDB($value);
 	}
 
+	/**
+	 * Переопределено для установки типа результата
+	 * @param $value
+	 * @return bool
+	 */
 	public function fromDB($value): bool
 	{
 		return $value;
 	}
 
+	/**
+	 * Возвращает значение поля по умолчанию
+	 * Переопределено для установки типа результата
+	 * @return bool
+	 */
 	public function getDefaultValue(): bool
 	{
 		return parent::getDefaultValue();

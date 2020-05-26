@@ -4,7 +4,7 @@
 namespace App\DB\Fields;
 
 
-class IntegerField extends Field
+class IntegerField extends TableField
 {
 	public function toDB($value): int
 	{

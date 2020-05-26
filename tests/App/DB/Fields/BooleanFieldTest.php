@@ -56,7 +56,6 @@ class BooleanFieldTest extends TestCase
 			->disableOriginalConstructor()
 			->getMock();
 
-//		$table->method('method1')->willReturn([1,2,3]);
 		return [
 			'boolean_true' => [
 				'field' => new BooleanField($table, 'NAME', true, true),

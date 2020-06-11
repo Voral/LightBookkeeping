@@ -1,7 +1,6 @@
 <?php
+namespace App\DB\Fields;
 
-
-use App\DB\Fields\StringField;
 use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 

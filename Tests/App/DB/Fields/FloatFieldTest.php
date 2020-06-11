@@ -1,7 +1,6 @@
 <?php
+namespace App\DB\Fields;
 
-
-use App\DB\Fields\FloatField;
 use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
@@ -42,16 +41,16 @@ class FloatFieldTest extends TestCase
 	{
 		return [
 			'double' => [
-				'value' => 10.2,
-				'expected' => 10.2
+				10.2,
+				10.2
 			],
 			'string' => [
-				'value' => ' 10.3',
-				'expected' => 10.3
+				' 10.3',
+				10.3
 			],
 			'string_comma' => [
-				'value' => ' 10,4',
-				'expected' => 10.4
+				' 10,4',
+				10.4
 			],
 		];
 	}

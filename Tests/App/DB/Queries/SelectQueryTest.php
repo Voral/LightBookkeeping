@@ -1,6 +1,5 @@
 <?php
-
-use App\DB\Queries\SelectQuery;
+namespace App\DB\Queries;
 use App\DB\Tables\AccountTable;
 use App\Exception\FieldUndefinedException;
 use PHPUnit\Framework\TestCase;
@@ -28,11 +27,12 @@ class SelectQueryTest extends TestCase
 	{
 		$table = new AccountTable();
 		$query = new SelectQuery($table);
+		$fieldName = 'left_margin';
 		$query
 			->setSelect(['id', 'name', 'a1' => 'parent_id'])
-			->addSelect('left_margin')
-			->addSelect('left_margin')
-			->addSelect('left_margin', 'b');
+			->addSelect($fieldName)
+			->addSelect($fieldName)
+			->addSelect($fieldName, 'b');
 
 		$this->assertEquals('select a.id,a.name,a.parent_id a1,a.left_margin,a.left_margin b from account a', $query->get());
 	}

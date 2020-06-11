@@ -25,7 +25,7 @@ class FieldUndefinedException extends AppException
 
 		parent::__construct(
 			sprintf('Field %s is not defined in table %s', $fieldName, $tableName),
-			AppException::FIELD_UNKNOWN_VALUE_TYPE
+			AppException::FIELD_UNDEFINED
 		);
 		$this->fieldName = $fieldName;
 		$this->tableName = $tableName;

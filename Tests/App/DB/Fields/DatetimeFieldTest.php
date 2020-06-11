@@ -1,9 +1,10 @@
 <?php
+namespace App\DB\Fields;
 
 use App\DB\Tables\Table;
 use App\Exception\FieldValueException;
+use DateTime;
 use \PHPUnit\Framework\TestCase;
-use App\DB\Fields\DatetimeField;
 
 class DatetimeFieldTest extends TestCase
 {
@@ -76,28 +77,28 @@ class DatetimeFieldTest extends TestCase
 	{
 		return [
 			'Y-m-d H:i:s' => [
-				'value' => '2019-01-01 00:00:00',
-				'expected' => '2019-01-01'
+				'2019-01-01 00:00:00',
+				'2019-01-01'
 			],
 			'Y-m-d' => [
-				'value' => '2019-01-02',
-				'expected' => '2019-01-02'
+				'2019-01-02',
+				'2019-01-02'
 			],
 			'd/m/Y' => [
-				'value' => '02/01/2019',
-				'expected' => '2019-01-02'
+				'02/01/2019',
+				'2019-01-02'
 			],
 			'd.m.Y' => [
-				'value' => '02.01.2019',
-				'expected' => '2019-01-02'
+				'02.01.2019',
+				'2019-01-02'
 			],
 			'd,m-Y' => [
-				'value' => '02,01-2019',
-				'expected' => '2019-01-02'
+				'02,01-2019',
+				'2019-01-02'
 			],
 			'DateTime' => [
-				'value' => DateTime::createFromFormat('Y-m-d', '2019-01-02'),
-				'expected' => '2019-01-02'
+				DateTime::createFromFormat('Y-m-d', '2019-01-02'),
+				'2019-01-02'
 			],
 		];
 	}

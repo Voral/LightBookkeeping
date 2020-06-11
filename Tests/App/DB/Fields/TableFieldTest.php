@@ -1,6 +1,6 @@
 <?php
+namespace App\DB\Fields;
 
-use App\DB\Fields\TableField;
 use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
@@ -76,12 +76,12 @@ class TableFieldTest extends TestCase
 		$field = new TableField($table, 'TEST1', true);
 		return [
 			'single' => [
-				'result' => $field->sqlField(),
-				'expected' => 'ab.TEST1'
+				$field->sqlField(),
+				'ab.TEST1'
 			],
 			'alias' => [
-				'result' => $field->sqlField('al'),
-				'expected' => 'ab.TEST1 al'
+				$field->sqlField('al'),
+				'ab.TEST1 al'
 			],
 		];
 	}

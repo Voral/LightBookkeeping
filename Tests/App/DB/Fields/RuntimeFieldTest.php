@@ -1,6 +1,6 @@
 <?php
+namespace App\DB\Fields;
 
-use App\DB\Fields\RuntimeField;
 use App\DB\Tables\AccountTable;
 use App\DB\Tables\JournalTable;
 use App\Exception\FieldUndefinedException;
@@ -28,28 +28,28 @@ class RuntimeFieldTest extends TestCase
 		$tableJournal = new JournalTable();
 		return [
 			'oneTableNoField' => [
-				'field' => new RuntimeField('test', 'now()', []),
-				'expected' => 'now() test'
+				new RuntimeField('test', 'now()', []),
+				'now() test'
 			],
 			'oneTableOneField' => [
-				'field' => new RuntimeField('test', 'sum(%s)', [
+				new RuntimeField('test', 'sum(%s)', [
 					$table->getField('id')
 				]),
-				'expected' => 'sum(a.id) test'
+				'sum(a.id) test'
 			],
 			'oneTableTwoField' => [
-				'field' => new RuntimeField('test', '%s + %s', [
+				new RuntimeField('test', '%s + %s', [
 					$table->getField('id'),
 					$table->getField('parent_id')
 				]),
-				'expected' => 'a.id + a.parent_id test'
+				'a.id + a.parent_id test'
 			],
 			'twoTableTwoField' => [
-				'field' => new RuntimeField('test', '%s + %s', [
+				new RuntimeField('test', '%s + %s', [
 					$table->getField('id'),
 					$tableJournal->getField('id')
 				]),
-				'expected' => 'a.id + j.id test'
+				'a.id + j.id test'
 			]
 		];
 	}

@@ -1,7 +1,7 @@
 <?php
+namespace App\DB\Fields;
 
 
-use App\DB\Fields\BooleanField;
 use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
@@ -58,20 +58,20 @@ class BooleanFieldTest extends TestCase
 
 		return [
 			'boolean_true' => [
-				'field' => new BooleanField($table, 'NAME', true, true),
-				'expected' => true
+				new BooleanField($table, 'NAME', true, true),
+				true
 			],
 			'boolean_false' => [
-				'field' => new BooleanField($table, 'NAME', true, false),
-				'expected' => false
+				new BooleanField($table, 'NAME', true, false),
+				false
 			],
 			'int_1' => [
-				'field' => new BooleanField($table, 'NAME', true, 1),
-				'expected' => true
+				new BooleanField($table, 'NAME', true, 1),
+				true
 			],
 			'int_0' => [
-				'field' => new BooleanField($table, 'NAME', true, 0),
-				'expected' => false
+				new BooleanField($table, 'NAME', true, 0),
+				false
 			]
 		];
 	}

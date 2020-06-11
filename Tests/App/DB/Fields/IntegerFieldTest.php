@@ -1,7 +1,6 @@
 <?php
+namespace App\DB\Fields;
 
-
-use App\DB\Fields\IntegerField;
 use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
@@ -42,16 +41,16 @@ class IntegerFieldTest extends TestCase
 	{
 		return [
 			'integer_string' => [
-				'value' => '10',
-				'expected' => 10
+				'10',
+				10
 			],
 			'float' => [
-				'value' => 10.4,
-				'expected' => 10
+				10.4,
+				10
 			],
 			'float_string' => [
-				'value' => 10.4,
-				'expected' => 10
+				10.4,
+				10
 			]
 		];
 	}

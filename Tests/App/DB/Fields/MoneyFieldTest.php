@@ -1,7 +1,6 @@
 <?php
+namespace App\DB\Fields;
 
-
-use App\DB\Fields\MoneyField;
 use App\DB\Tables\Table;
 use PHPUnit\Framework\TestCase;
 
@@ -27,20 +26,20 @@ class MoneyFieldTest extends TestCase
 	{
 		return [
 			[
-				'value' => 10.2551,
-				'expected' => 10.26
+				10.2551,
+				10.26
 			],
 			[
-				'value' => -10.2551,
-				'expected' => -10.26
+				-10.2551,
+				-10.26
 			],
 			[
-				'value' => ' 10.25',
-				'expected' => 10.25
+				' 10.25',
+				10.25
 			],
 			[
-				'value' => ' 10,0001',
-				'expected' => 10.00
+				' 10,0001',
+				10.00
 			],
 		];
 	}

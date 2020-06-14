@@ -4,8 +4,8 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.1.0",
-        "ext-pdo": "^7.1",
+        "php": ">=7.2.0",
+        "ext-pdo": "^7.2",
         "ext-json": "*",
         "phpdocumentor/phpdocumentor": "2.*",
         "robmorgan/phinx": "^0.8.1"

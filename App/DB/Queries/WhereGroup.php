@@ -3,6 +3,8 @@
 
 namespace App\DB\Queries;
 
+use App\Exception\QueryUnknownLogicException;
+
 /**
  * Группа условий связанная логикой
  * Class WhereGroup
@@ -66,5 +68,29 @@ abstract class WhereGroup extends Where
 				) . ')';
 		}
 		return $return;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLogic(): string
+	{
+		return $this->logic;
+	}
+
+	/**
+	 * @param Where[] $where
+	 * @param string $logic
+	 * @return WhereGroupAnd|WhereGroupOr
+	 * @throws QueryUnknownLogicException
+	 */
+	public static function fabric($where,$logic = WhereGroup::LOGIC_AND) {
+		if ($logic === WhereGroup::LOGIC_AND) {
+			return new WhereGroupAnd($where);
+		}
+		if ($logic === WhereGroup::LOGIC_OR) {
+			return new WhereGroupOr($where);
+		}
+		throw new QueryUnknownLogicException($logic);
 	}
 }

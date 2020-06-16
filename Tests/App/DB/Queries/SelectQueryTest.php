@@ -3,6 +3,7 @@
 namespace App\DB\Queries;
 
 use App\DB\Tables\AccountTable;
+use App\DB\Tables\JournalTable;
 use App\Exception\FieldUndefinedException;
 use App\Exception\QueryUnknownLogicException;
 use PHPUnit\Framework\TestCase;
@@ -80,7 +81,7 @@ class SelectQueryTest extends TestCase
 		$fieldName = $account->getField('name');
 		$where1 = new WhereGroupOr([
 			new Equal($fieldId, 2),
-			new Like($fieldName,'test')
+			new Like($fieldName, 'test')
 		]);
 		$where = new Equal($fieldId, 1);
 		return [
@@ -101,8 +102,49 @@ class SelectQueryTest extends TestCase
 				'select a.id from account a where ((a.id=2 or a.name like \'%test%\') and not a.name is null)'
 			],
 			'addSame' => [
-				$query->setWhere($where1)->addWhere(new NotIsNull($fieldName),WhereGroup::LOGIC_OR)->get(),
+				$query->setWhere($where1)->addWhere(new NotIsNull($fieldName), WhereGroup::LOGIC_OR)->get(),
 				'select a.id from account a where (a.id=2 or a.name like \'%test%\' or not a.name is null)'
+			],
+		];
+	}
+
+	/**
+	 * @param string $result
+	 * @param string $expected
+	 * @dataProvider joinDataProvider
+	 */
+	public function testJoin(string $result, string $expected)
+	{
+		$this->assertEquals($result, $expected);
+	}
+
+	/**
+	 * - формирование join запроса
+	 * - если таблица добавляется повторно - к алиасу добавляется цифровой суффикс
+	 * @return array[]
+	 * @throws FieldUndefinedException
+	 */
+	public function joinDataProvider()
+	{
+		$account1 = new AccountTable();
+		$account2 = new AccountTable();
+		$journal = new JournalTable();
+		$query = new SelectQuery($journal);
+		$fieldAccId1 = $account1->getField('id');
+		$fieldAccId2 = $account2->getField('id');
+		$fieldJrnSrcId = $journal->getField('account_src_id');
+		$fieldJrnDstId = $journal->getField('account_dst_id');
+		return [
+			'single' => [
+				$query->setJoin([new JoinLeft($account1, new Equal($fieldAccId2, $fieldJrnDstId))])->get(),
+				'select j.id from journal j left join account a on a.id=j.account_dst_id'
+			],
+			'add' => [
+				$query
+					->setJoin([new JoinLeft($account1, new Equal($fieldAccId1, $fieldJrnDstId))])
+					->addJoin(new JoinLeft($account2, new Equal($fieldAccId2, $fieldJrnSrcId)))
+					->get(),
+				'select j.id from journal j left join account a on a.id=j.account_dst_id left join account a1 on a1.id=j.account_src_id'
 			],
 		];
 	}

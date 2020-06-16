@@ -12,12 +12,14 @@ abstract class Table
 	/** @var array Field */
 	protected $fields = [];
 
+	private $aliasSuffix = '';
+
 	/**
 	 * @return string
 	 */
 	public function getAlias(): string
 	{
-		return $this->alias;
+		return $this->alias.$this->aliasSuffix;
 	}
 
 	/**
@@ -47,5 +49,15 @@ abstract class Table
 			return $this->fields[$name];
 		}
 		throw new FieldUndefinedException($this->name, $name);
+	}
+
+	/**
+	 * @param int $aliasSuffix
+	 * @return self
+	 */
+	public function setAliasSuffix(int $aliasSuffix): self
+	{
+		$this->aliasSuffix = $aliasSuffix <= 0 ? '' : $aliasSuffix;
+		return $this;
 	}
 }

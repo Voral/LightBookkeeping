@@ -2,6 +2,7 @@
 
 namespace App\DB\Queries;
 
+use App\DB\Tables\Table;
 use App\Exception\FieldUndefinedException;
 use App\Exception\QueryUnknownLogicException;
 
@@ -10,22 +11,45 @@ class SelectQuery extends Query
 	private $select = [];
 	/** @var Where */
 	private $where;
+	/** @var Join[] */
+	private $join = [];
+	private $tableRegistry = [];
 
+	/**
+	 * Генерация строки SQL запроса
+	 * @return string
+	 */
 	public function get(): string
 	{
-		$sql = sprintf(
+		$sql = [];
+		$this->generateSelect($sql);
+		$this->generateJoin($sql);
+		$this->generateWhere($sql);
+		return implode(' ', $sql);
+	}
+
+	private function generateSelect(array &$sql): void
+	{
+		$sql[] = sprintf(
 			'select %s from %s %s',
 			$this->getSelect(),
 			$this->table->getName(),
-			$this->aliasRegistry[spl_object_id($this->table)]
+			$this->table->getAlias()
 		);
+	}
+
+	/**
+	 * Генерация условий запроса
+	 * @param array $sql
+	 */
+	private function generateWhere(array &$sql): void
+	{
 		if ($this->where) {
 			$sqlWhere = $this->where->get();
 			if ($sqlWhere !== '') {
-				$sql .= sprintf(' where %s',$sqlWhere);
+				$sql[] = sprintf('where %s', $sqlWhere);
 			}
 		}
-		return $sql;
 	}
 
 	public function setSelect(array $arSelect): self
@@ -47,7 +71,7 @@ class SelectQuery extends Query
 	private function getSelect(): string
 	{
 		$arSelect = empty($this->select) ? ['id'] : $this->select;
-		array_walk($arSelect, [$this, 'generateSelect']);
+		array_walk($arSelect, [$this, 'prepareSelect']);
 		return implode(',', array_unique(array_values($arSelect)));
 	}
 
@@ -57,7 +81,7 @@ class SelectQuery extends Query
 	 * @param string $key
 	 * @throws FieldUndefinedException Выбрасывается если запрошено не существующее поле
 	 */
-	public function generateSelect(string &$name, string $key): void
+	private function prepareSelect(string &$name, string $key): void
 	{
 		$alias = is_numeric($key) ? '' : $key;
 		$name = $this->table->getField($name)->sqlField($alias);
@@ -81,7 +105,7 @@ class SelectQuery extends Query
 	 * @return self
 	 * @throws QueryUnknownLogicException
 	 */
-	public function addWhere(Where $where, $logic = WhereGroup::LOGIC_AND):self
+	public function addWhere(Where $where, $logic = WhereGroup::LOGIC_AND): self
 	{
 		if ($this->where instanceof WhereGroup && $this->where->getLogic() === $logic) {
 			$this->where->addItem($where);
@@ -89,5 +113,77 @@ class SelectQuery extends Query
 			$this->where = WhereGroup::fabric([$this->where, $where], $logic);
 		}
 		return $this;
+	}
+
+	/**
+	 * Устаналвиваем список Join
+	 * @param Join[] $join
+	 * @return self
+	 */
+	public function setJoin(array $join): self
+	{
+		$this->join = $join;
+		$this->tableRegistry = [
+			get_class($this->table) => 0
+		];
+		foreach ($this->join as $join) {
+			$this->registerTable($join->getTable());
+		}
+		return $this;
+	}
+
+	/**
+	 * Регистрация таблиц участвующих в запросе и установка
+	 * суффиксов алиасов для обеспечения уникальности
+	 * @param Table $table
+	 */
+	private function registerTable(Table $table): void
+	{
+		$class = get_class($table);
+		if (array_key_exists($class, $this->tableRegistry)) {
+			$table->setAliasSuffix(++$this->tableRegistry[$class]);
+		} else {
+			$this->tableRegistry[$class] = 0;
+		}
+	}
+
+	/**
+	 * Добавление join в список
+	 * @param Join $join
+	 * @return $this
+	 */
+	public function addJoin(Join $join): self
+	{
+		if (empty($this->tableRegistry)) {
+			$this->tableRegistry = [
+				get_class($this->table) => 0
+			];
+			$this->join = [];
+		}
+		$this->registerTable($join->getTable());
+		$this->join[] = $join;
+		return $this;
+	}
+
+	/**
+	 * Генерирует строку join
+	 * @param array $sql
+	 */
+	private function generateJoin(array &$sql): void
+	{
+		$str = implode(' ', array_map([$this, 'prepareJoin'], $this->join));
+		if ($str !== '') {
+			$sql[] = $str;
+		}
+	}
+
+	/**
+	 * Обработка массива join для построения строки
+	 * @param Join $item
+	 * @return string
+	 */
+	private function prepareJoin(Join $item): string
+	{
+		return $item->get();
 	}
 }

@@ -4,13 +4,10 @@ namespace App\DB\Queries;
 
 use App\DB\Tables\Table;
 use App\Exception\FieldUndefinedException;
-use App\Exception\QueryUnknownLogicException;
 
-class SelectQuery extends Query
+class SelectQuery extends WhereQuery
 {
 	private $select = [];
-	/** @var Where */
-	private $where;
 	/** @var Join[] */
 	private $join = [];
 	private $tableRegistry = [];
@@ -36,20 +33,6 @@ class SelectQuery extends Query
 			$this->table->getName(),
 			$this->table->getAlias()
 		);
-	}
-
-	/**
-	 * Генерация условий запроса
-	 * @param array $sql
-	 */
-	private function generateWhere(array &$sql): void
-	{
-		if ($this->where) {
-			$sqlWhere = $this->where->get();
-			if ($sqlWhere !== '') {
-				$sql[] = sprintf('where %s', $sqlWhere);
-			}
-		}
 	}
 
 	public function setSelect(array $arSelect): self
@@ -88,34 +71,6 @@ class SelectQuery extends Query
 	}
 
 	/**
-	 * Устанавливает условие выборки
-	 * @param Where $where
-	 * @return self
-	 */
-	public function setWhere(Where $where): self
-	{
-		$this->where = $where;
-		return $this;
-	}
-
-	/**
-	 * Добавляет условие выборки
-	 * @param Where $where
-	 * @param string $logic
-	 * @return self
-	 * @throws QueryUnknownLogicException
-	 */
-	public function addWhere(Where $where, $logic = WhereGroup::LOGIC_AND): self
-	{
-		if ($this->where instanceof WhereGroup && $this->where->getLogic() === $logic) {
-			$this->where->addItem($where);
-		} else {
-			$this->where = WhereGroup::fabric([$this->where, $where], $logic);
-		}
-		return $this;
-	}
-
-	/**
 	 * Устаналвиваем список Join
 	 * @param Join[] $join
 	 * @return self
@@ -123,9 +78,7 @@ class SelectQuery extends Query
 	public function setJoin(array $join): self
 	{
 		$this->join = $join;
-		$this->tableRegistry = [
-			get_class($this->table) => 0
-		];
+		$this->tableRegistry = [get_class($this->table) => 0];
 		foreach ($this->join as $join) {
 			$this->registerTable($join->getTable());
 		}
@@ -155,9 +108,7 @@ class SelectQuery extends Query
 	public function addJoin(Join $join): self
 	{
 		if (empty($this->tableRegistry)) {
-			$this->tableRegistry = [
-				get_class($this->table) => 0
-			];
+			$this->tableRegistry = [get_class($this->table) => 0];
 			$this->join = [];
 		}
 		$this->registerTable($join->getTable());

@@ -18,6 +18,9 @@ class TableField extends Field
 	/** @var mixed занчение поля по умолчанию */
 	private $defaultValue;
 
+	/** @var bool показывать алиас таблцы */
+	private static $showTableAlias = true;
+
 	public function __construct(Table $table, string $name, bool $canNull = false, $defaultValue = null)
 	{
 		parent::__construct($name);
@@ -86,10 +89,22 @@ class TableField extends Field
 
 	public function sqlField(string $alias = ''): string
 	{
-		$result = sprintf('%s.%s', $this->table->getAlias(), $this->name);
-		if ($alias !== ''){
-			$result .= (' '.$alias);
+
+		$result = self::$showTableAlias
+			? sprintf('%s.%s', $this->table->getAlias(), $this->name)
+			: $this->name;
+		if ($alias !== '') {
+			$result .= (' ' . $alias);
 		}
 		return $result;
 	}
+
+	/**
+	 * @param bool $showTableAlias
+	 */
+	public static function setShowTableAlias(bool $showTableAlias): void
+	{
+		self::$showTableAlias = $showTableAlias;
+	}
+
 }

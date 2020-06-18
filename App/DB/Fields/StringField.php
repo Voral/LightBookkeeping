@@ -13,7 +13,7 @@ class StringField extends TableField
 {
 	public function toDB($value): string
 	{
-		return $this->prepareValue($value);
+		return sprintf("'%s'",$this->quote($this->prepareValue($value)));
 	}
 
 	/**
@@ -33,6 +33,6 @@ class StringField extends TableField
 
 	public function getDefaultValue(): string
 	{
-		return parent::getDefaultValue();
+		return trim(parent::getDefaultValue());
 	}
 }

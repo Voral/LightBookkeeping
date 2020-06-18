@@ -24,7 +24,10 @@ class DatetimeField extends TableField
 	 */
 	public function toDB($value): string
 	{
-		return $this->prepareValue($value)->format(self::$format);
+		return sprintf(
+			"'%s'",
+			$this->prepareValue($value)->format(self::$format)
+		);
 	}
 
 	/**

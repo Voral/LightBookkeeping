@@ -17,7 +17,7 @@ class StringFieldTest extends TestCase
 			->disableOriginalConstructor()
 			->getMock();
 		$field = new StringField($table,'NAME');
-		$this->assertSame('10', $field->fromDB(10));
+		$this->assertSame("10", $field->fromDB(10));
 	}
 
 	/**
@@ -30,10 +30,10 @@ class StringFieldTest extends TestCase
 			->disableOriginalConstructor()
 			->getMock();
 		$field = new StringField($table,'NAME');
-		$this->assertSame('10', $field->toDB(10));
-		$this->assertSame('testing', $field->toDB(" \ttesting\n"));
-		$this->assertSame('10', $field->prepareValue(10));
-		$this->assertSame('testing', $field->prepareValue(" \ttesting\n"));
+		$this->assertSame("'10'", $field->toDB(10));
+		$this->assertSame("'testing'", $field->toDB(" \ttesting\n"));
+		$this->assertSame("10", $field->prepareValue(10));
+		$this->assertSame("testing", $field->prepareValue(" \ttesting\n"));
 	}
 
 	/**
@@ -46,6 +46,6 @@ class StringFieldTest extends TestCase
 			->disableOriginalConstructor()
 			->getMock();
 		$field = new StringField($table,'NAME', true, 10);
-		$this->assertSame('10', $field->getDefaultValue());
+		$this->assertSame("10", $field->getDefaultValue());
 	}
 }

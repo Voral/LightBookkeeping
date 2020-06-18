@@ -51,7 +51,7 @@ class DatetimeFieldTest extends TestCase
 			->disableOriginalConstructor()
 			->getMock();
 		$field = new DatetimeField($table,'NAME');
-		$this->assertEquals('2019-01-01 01:02:03', $field->toDB('2019-01-01 01:02:03'));
+		$this->assertEquals("'2019-01-01 01:02:03'", $field->toDB('2019-01-01 01:02:03'));
 	}
 
 	/**

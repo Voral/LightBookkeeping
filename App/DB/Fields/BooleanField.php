@@ -17,7 +17,7 @@ class BooleanField extends TableField
 	 */
 	public function toDB($value): int
 	{
-		return parent::toDB($value);
+		return 0 === (int)$value ? 0 : 1;
 	}
 
 	/**
@@ -37,7 +37,7 @@ class BooleanField extends TableField
 	 */
 	public function getDefaultValue(): bool
 	{
-		return parent::getDefaultValue();
+		return (bool)parent::getDefaultValue();
 	}
 
 	/**

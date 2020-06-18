@@ -72,8 +72,7 @@ class TableField extends Field
 	 * @param $value
 	 * @return mixed
 	 */
-	public function prepareValue($value)
-	{
+	public function prepareValue($value){
 		return $value;
 	}
 
@@ -105,6 +104,22 @@ class TableField extends Field
 	public static function setShowTableAlias(bool $showTableAlias): void
 	{
 		self::$showTableAlias = $showTableAlias;
+	}
+
+	/**
+	 * Экранирует строку для вставки в запрос.
+	 * Аналог PDO::quote
+	 * @param $value
+	 * @return string
+	 * @see https://www.php.net/manual/ru/pdo.quote.php
+	 */
+	protected function quote($value) : string
+	{
+		return str_replace(
+			["\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a"],
+			["\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z"],
+			$value
+		);
 	}
 
 }

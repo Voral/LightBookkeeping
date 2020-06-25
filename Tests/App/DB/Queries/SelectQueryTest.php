@@ -2,6 +2,7 @@
 
 namespace App\DB\Queries;
 
+use App\DB\Fields\RuntimeField;
 use App\DB\Tables\AccountTable;
 use App\DB\Tables\JournalTable;
 use App\Exception\FieldUndefinedException;
@@ -31,26 +32,18 @@ class SelectQueryTest extends TestCase
 	{
 		$table = new AccountTable();
 		$query = new SelectQuery($table);
-		$fieldName = 'left_margin';
+		$field = $table->getField('left_margin');
 		$query
-			->setSelect(['id', 'name', 'a1' => 'parent_id'])
-			->addSelect($fieldName)
-			->addSelect($fieldName)
-			->addSelect($fieldName, 'b');
+			->setSelect([
+				$table->getField('id'),
+				$table->getField('name'),
+				'a1' => $table->getField('parent_id')
+			])
+			->addSelect($field)
+			->addSelect($field)
+			->addSelect($field, 'b');
 
 		$this->assertEquals('select a.id,a.name,a.parent_id a1,a.left_margin,a.left_margin b from account a', $query->get());
-	}
-
-	/**
-	 * При добавлении в селект поля несуществующее в таблице выбрасывается исключение
-	 */
-	public function testUndefinedField(): void
-	{
-		$this->expectException(FieldUndefinedException::class);
-		$this->expectErrorMessage('Field abra is not defined in table account');
-		$table = new AccountTable();
-		$query = new SelectQuery($table);
-		$query->setSelect(['abra'])->get();
 	}
 
 	/**
@@ -108,6 +101,45 @@ class SelectQueryTest extends TestCase
 		];
 	}
 
+	public function testGroup()
+	{
+		$account = new AccountTable();
+		$query = new SelectQuery($account);
+		$query
+			->setSelect([
+				$account->getField('name'),
+				$account->getField('short_name'),
+				new RuntimeField('max_id', 'max(%s)', [$account->getField('id')])
+			])
+			->setGroup([
+				$account->getField('name'),
+				$account->getField('short_name')
+			]);
+		$this->assertEquals(
+			'select a.name,a.short_name,max(a.id) max_id from account a group by a.name,a.short_name',
+			$query->get()
+		);
+	}
+
+	public function testOrder()
+	{
+		$account = new AccountTable();
+		$query = new SelectQuery($account);
+		$query
+			->setSelect([
+				$account->getField('name'),
+				$account->getField('short_name'),
+			])
+			->setOrder([
+				$account->getField('short_name'),
+				$account->getField('name')
+			]);
+		$this->assertEquals(
+			'select a.name,a.short_name from account a order by a.short_name,a.name',
+			$query->get()
+		);
+	}
+
 	/**
 	 * @param string $result
 	 * @param string $expected
@@ -149,4 +181,36 @@ class SelectQueryTest extends TestCase
 		];
 	}
 
+	/**
+	 * @param string $actual
+	 * @param string $expected
+	 * @dataProvider limitDataProvider
+	 */
+	public function testLimit(string $actual, string $expected): void
+	{
+		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * @return array[]
+	 * @throws FieldUndefinedException
+	 */
+	public function limitDataProvider(): array
+	{
+		$account = new AccountTable();
+		return [
+			'rows' => [
+				(new SelectQuery($account))->setRowCount(10)->get(),
+				'select a.id from account a limit 10'
+			],
+			'offset' => [
+				(new SelectQuery($account))->setOffset(5)->get(),
+				sprintf('select a.id from account a limit 5,%d', PHP_INT_MAX)
+			],
+			'both' => [
+				(new SelectQuery($account))->setRowCount(20)->setOffset(6)->get(),
+				'select a.id from account a limit 6,20'
+			]
+		];
+	}
 }

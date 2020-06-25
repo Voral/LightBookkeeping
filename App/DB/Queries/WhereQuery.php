@@ -18,8 +18,10 @@ abstract class WhereQuery extends Query
 	/**
 	 * Генерация условий запроса
 	 * @param array $sql
+	 * @param static
+	 * @return static
 	 */
-	protected function generateWhere(array &$sql): void
+	protected function generateWhere(array &$sql)
 	{
 		if ($this->where) {
 			$sqlWhere = $this->where->get();
@@ -27,6 +29,7 @@ abstract class WhereQuery extends Query
 				$sql[] = sprintf('where %s', $sqlWhere);
 			}
 		}
+		return $this;
 	}
 
 	/**

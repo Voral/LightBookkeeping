@@ -22,6 +22,7 @@
     },
     "scripts": {
         "test": "phpunit --colors=always",
+        "test-debug": "export PHP_IDE_CONFIG=\"serverName=localhost\" && phpunit --colors=always",
         "doc": "vendor/bin/phpdoc -d ./App -t ./www/docs/"
     }
 }

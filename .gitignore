@@ -3,3 +3,5 @@ phinx.yml
 vendor
 www/docs
 .idea
+Settings/config.php
+/.phpunit.result.cache

@@ -4,11 +4,10 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.2.0",
-        "ext-pdo": "^7.2",
+        "php": ">=8.5.0",
+        "ext-pdo": "*",
         "ext-json": "*",
-        "phpdocumentor/phpdocumentor": "2.*",
-        "robmorgan/phinx": "^0.8.1"
+        "robmorgan/phinx": "^0.16"
     },
     "autoload": {
         "psr-4": {
@@ -17,7 +16,7 @@
     },
     "require-dev": {
         "ext-xsl": "*",
-        "phpunit/phpunit": "^9.1",
+        "phpunit/phpunit": "^13.0",
         "roave/security-advisories": "dev-master"
     },
     "scripts": {
